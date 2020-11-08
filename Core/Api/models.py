@@ -58,6 +58,7 @@ class Userdetails(models.Model):
     userdetails_lastname = models.CharField(max_length=80, blank=True, null=True)
     userdetails_phone = models.CharField(max_length=80, blank=True, null=True)
     userdetails_email = models.CharField(max_length=80, blank=True, null=True)
+    userdetails_bd = models.DateField(blank=True, null=True)
     department = models.ForeignKey(Department, blank=True, null=True ,on_delete= models.CASCADE)
     position = models.ForeignKey(Position, blank=True, null=True,on_delete= models.CASCADE)
     userdetails_avatar = models.CharField(max_length=104, blank=True, null=True)
@@ -97,3 +98,43 @@ class Token(models.Model):
         db_table = "token"
     def __str__(self):
         return str(self.token)
+ 
+
+class Admin(models.Model):
+    admin_id = models.AutoField(primary_key=True)
+    admin_public_id =  models.UUIDField(
+         default=uuid.uuid4, editable=False
+    )
+    company = models.ForeignKey(Company, models.CASCADE)
+    admin_username = models.CharField(max_length=100, unique=True , blank=False, null=False )
+    admin_password = models.CharField(max_length=80, blank=True, null=True)
+    admin_is_active = models.BooleanField(default=False)
+    class Meta:
+        db_table = "admin"
+    def __str__(self):
+        return str(self.admin_public_id)
+class News_category (models.Model):
+    news_category_id = models.AutoField(primary_key=True)
+    news_category_name = models.CharField(max_length=80, blank=True, null=True)
+    class Meta:
+        db_table = "news_category"
+    def __str__(self):
+        return str(self.news_category_name)
+class News(models.Model):
+    news_id = models.AutoField(primary_key=True)
+    news_title = models.CharField(max_length=180, blank=True, null=True)    
+    news_excerpt = models.CharField(max_length=180, blank=True, null=True)    
+    news_body =   models.TextField(blank = True)
+    news_image =  models.CharField(max_length=180, blank=True, null=True)    
+    news_category = models.ForeignKey(News_category, models.CASCADE)
+    company = models.ForeignKey(Company, models.CASCADE)
+    admin = models.ForeignKey(Admin, models.CASCADE)
+    created = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
+    delete_at = models.DateTimeField(blank=True, null=True )
+    class Meta:
+        db_table = "news"
+    def __str__(self):
+        return str(self.news_title)
+
+    

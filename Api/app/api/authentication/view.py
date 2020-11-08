@@ -51,7 +51,7 @@ async def check_user(req):
             
     except Exception as e :
         print(e)
-        return response.json({'error':'error'})
+        return response.json({'error':'error'}, status = 500)
 
 
     
