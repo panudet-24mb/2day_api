@@ -30,4 +30,21 @@ async def get_news (req,current_user):
 async def get_news_id (req,current_user,id):
     res = await FindOne(current_user["users_id"] ,id)
     return await response_json(res)
-    
+
+@news_service.route("/announcement" , methods=['GET'])
+@authorized()
+async def get_announcement(req,current_user):
+    _args = req.args
+    _default = " "
+    _params = _default
+    if "limit"  in _args :
+        limit = _args['limit'][0]
+        _params = " limit " + str(limit)
+    res = await FindAll_Announcement(current_user["users_id"] , _params )
+    return await response_json(res)
+
+@news_service.route("/announcement/<id>" , methods=['GET'])
+@authorized()
+async def get_announcement_id (req,current_user,id):
+    res = await FindOne_Announcement(current_user["users_id"] ,id)
+    return await response_json(res)

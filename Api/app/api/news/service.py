@@ -54,3 +54,49 @@ async def FindOne(user_id ,  id ):
     except Exception as e:
         print(e)
         return e
+
+async def FindAll_Announcement(user_id , params):
+    try:
+        async with in_transaction() as conn:
+            query = (   " select * from announcement  as n "
+            " left join company_has_users as chu on chu.company_id = n.company_id  " 
+            " where chu.users_id = $1 and chu.is_active = true and n.delete_at  IS NULL  order by n.announcement_id DESC  " + params
+            )
+            find_all = await conn.execute_query_dict(
+                query ,[int(user_id) , ]
+             )
+            json_data = json.dumps(find_all , cls=UUIDEncoder)    
+            data =  json.loads(json_data)
+        return ({
+        "status" : "Success" ,
+        "message" :  { "news" : data} , 
+        "status_code" : 200
+        })  
+
+    except Exception as e:
+        print(e)
+        return e
+
+
+async def FindOne_Announcement(user_id , params):
+    try:
+        async with in_transaction() as conn:
+            query = (   " select * from announcement  as n "
+            " left join company_has_users as chu on chu.company_id = n.company_id  " 
+            " where chu.users_id = $1 and chu.is_active = true and n.delete_at  IS NULL   and n.announcement_id = $2  " 
+            )
+            find_all = await conn.execute_query_dict(
+                query ,[int(user_id) ,int(params) ]
+             )
+            json_data = json.dumps(find_all , cls=UUIDEncoder)    
+            data =  json.loads(json_data)
+        return ({
+        "status" : "Success" ,
+        "message" :  { "news" : data} , 
+        "status_code" : 200
+        })  
+
+    except Exception as e:
+        print(e)
+        return e
+    

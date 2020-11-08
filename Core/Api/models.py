@@ -124,8 +124,8 @@ class News(models.Model):
     news_id = models.AutoField(primary_key=True)
     news_title = models.CharField(max_length=180, blank=True, null=True)    
     news_excerpt = models.CharField(max_length=180, blank=True, null=True)    
-    news_body =   models.TextField(blank = True)
-    news_image =  models.CharField(max_length=180, blank=True, null=True)    
+    news_body = models.TextField(blank = True)
+    news_image = models.CharField(max_length=180, blank=True, null=True)    
     news_category = models.ForeignKey(News_category, models.CASCADE)
     company = models.ForeignKey(Company, models.CASCADE)
     admin = models.ForeignKey(Admin, models.CASCADE)
@@ -137,4 +137,17 @@ class News(models.Model):
     def __str__(self):
         return str(self.news_title)
 
+class Announcement(models.Model):
+    announcement_id = models.AutoField(primary_key=True)
+    announcement_title  = models.CharField(max_length=180, blank=True, null=True)  
+    announcement_body = models.TextField(blank = True)
+    company = models.ForeignKey(Company, models.CASCADE)
+    admin = models.ForeignKey(Admin, models.CASCADE)
+    created = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
+    delete_at = models.DateTimeField(blank=True, null=True )
+    class Meta:
+        db_table = "announcement"
+    def __str__(self):
+        return str(self.announcement_title)
     
