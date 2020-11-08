@@ -15,5 +15,5 @@ def create_app():
     bcrypt = Bcrypt(app)
     app.static('/static', './static')
     static_file_bp = Blueprint('static', url_prefix='/static')
-    # CORS(app, automatic_options=True)
+    CORS(app, automatic_options=True)
     return app
