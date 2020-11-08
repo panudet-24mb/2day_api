@@ -76,7 +76,17 @@ class Company_has_users(models.Model):
         db_table = "company_has_users"
     def __str__(self):  
         return str(self.comapny_has_users_id)
-    
+
+class Company_has_usersdetails(models.Model):
+    company_has_users_details_id = models.AutoField(primary_key=True)
+    comapny_has_users = models.ForeignKey(Company_has_users, models.CASCADE , default=None)
+    userdetails = models.ForeignKey(Userdetails, models.CASCADE )
+    is_active = models.BooleanField(default=True)
+    class Meta:
+        db_table = "company_has_usersdetails"
+    def __str__(self):  
+        return str(self.company_has_users_details_id)
+
 class Token(models.Model):
     token_id = models.AutoField(primary_key=True)
     users = models.ForeignKey(Users, models.CASCADE)

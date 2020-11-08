@@ -25,13 +25,21 @@ async def check_user(req):
                 "payload" :  "ต้องการรหัสบัตรประชาชน" , 
                 } , status =  400
                 ) 
-        query_exist_user = ('select * from users as a left join userdetails as b on a.users_id = b.users_id left join department as d on d.department_id = b.department_id  left join position as p on p.position_id = b.position_id where a.users_citizen_id = $1')
+        query_exist_user = ( ' select * from users as a '
+                                ' left join company_has_users as b '
+                                ' on a.users_id = b.users_id '
+                                ' left join company_has_usersdetails as c on b.comapny_has_users_id = c.comapny_has_users_id '
+                                ' left join userdetails as ud on ud.userdetails_id = c.userdetails_id '
+                                ' left join department as d on d.department_id = ud.department_id  '
+                                ' left join position as p '
+                                ' on p.position_id = ud.position_id where a.users_citizen_id = $1 '
+                            )
         async with in_transaction() as conn:
-            count_total_users = await conn.execute_query_dict(
+            users_data = await conn.execute_query_dict(
             query_exist_user,[str(params["citizen_id"])] 
             )
-            if count_total_users  :
-                json_data = json.dumps(count_total_users , cls=UUIDEncoder)    
+            if users_data  :
+                json_data = json.dumps(users_data , cls=UUIDEncoder)    
                 return response.json({"payload" :  json.loads(json_data)})
             else :
                 return response.json({
