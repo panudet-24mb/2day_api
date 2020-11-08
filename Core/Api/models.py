@@ -58,8 +58,8 @@ class Userdetails(models.Model):
     userdetails_lastname = models.CharField(max_length=80, blank=True, null=True)
     userdetails_phone = models.CharField(max_length=80, blank=True, null=True)
     userdetails_email = models.CharField(max_length=80, blank=True, null=True)
-    userdetails_department = models.ForeignKey(Department, blank=True, null=True ,on_delete= models.CASCADE)
-    userdetails_position = models.ForeignKey(Position, blank=True, null=True,on_delete= models.CASCADE)
+    department = models.ForeignKey(Department, blank=True, null=True ,on_delete= models.CASCADE)
+    position = models.ForeignKey(Position, blank=True, null=True,on_delete= models.CASCADE)
     userdetails_avatar = models.CharField(max_length=104, blank=True, null=True)
     class Meta:
         db_table = "userdetails"
@@ -82,7 +82,7 @@ class Token(models.Model):
     users = models.ForeignKey(Users, models.CASCADE)
     token =  models.CharField(max_length=255, unique=True , blank=False, null=False )
     token_created = models.DateTimeField()
-    token_active = models.DateTimeField()
+    token_active = models.BooleanField(default=False)
     class Meta:
         db_table = "token"
     def __str__(self):

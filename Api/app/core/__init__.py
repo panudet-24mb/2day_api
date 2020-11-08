@@ -1,28 +1,19 @@
 import os
-from sanic import Sanic
+from sanic import Sanic 
+from sanic.blueprints import Blueprint
 from simple_bcrypt import Bcrypt
 from sanic_cors import CORS, cross_origin
-from app.db import postgres
-import asyncpg
-from app.api.api import api
+from app.db.db import config as DBconfig
+from tortoise.contrib.sanic import register_tortoise
+from sanic_limiter import Limiter, get_remote_address
 
 
 def create_app():
     app = Sanic(__name__)
-    app.blueprint(api)
+    # Limiter(app, global_limits=['60 per minute'], key_func=get_remote_address)
+    register_tortoise(app, generate_schemas=False ,config = DBconfig )
     bcrypt = Bcrypt(app)
-    setup_db(app)
-    CORS(app, automatic_options=True)
+    app.static('/static', './static')
+    static_file_bp = Blueprint('static', url_prefix='/static')
+    # CORS(app, automatic_options=True)
     return app
-
-def setup_db(app):
-    @app.listener('before_server_start')
-    async def setup_db(app, loop):
-        app.pg = await postgres.create_connection_pool()
-        
-    @app.listener('after_server_stop')
-    async def close_db(app, loop):
-        await app.pg.close()
-        
-
-
