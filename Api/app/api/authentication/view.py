@@ -33,7 +33,7 @@ async def check_user(req):
                                 ' left join department as d on d.department_id = ud.department_id  '
                                 ' left join position as p '
                                 ' on p.position_id = ud.position_id where a.users_citizen_id = $1 '
-                                ' AND c.is_active = true and b.is_active = true limit 1 ORDER by c.company_has_users_details_id DESC LIMIT 1 '
+                                ' AND c.is_active = true and b.is_active = true  ORDER by c.company_has_users_details_id DESC LIMIT 1 '
                             )
         async with in_transaction() as conn:
             users_data = await conn.execute_query_dict(
