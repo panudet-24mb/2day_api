@@ -68,7 +68,7 @@ class Userdetails(models.Model):
         return str(self.userdetails_id)
     
 class Company_has_users(models.Model):
-    comapny_has_users_id = models.AutoField(primary_key=True)
+    company_has_users_id = models.AutoField(primary_key=True)
     users = models.ForeignKey(Users, models.CASCADE)
     company = models.ForeignKey(Company, models.CASCADE)
     created = models.DateTimeField()
