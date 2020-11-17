@@ -76,11 +76,11 @@ class Company_has_users(models.Model):
     class Meta:
         db_table = "company_has_users"
     def __str__(self):  
-        return str(self.comapny_has_users_id)
+        return str(self.company_has_users_id)
 
 class Company_has_usersdetails(models.Model):
     company_has_users_details_id = models.AutoField(primary_key=True)
-    comapny_has_users = models.ForeignKey(Company_has_users, models.CASCADE , default=None)
+    company_has_users = models.ForeignKey(Company_has_users, models.CASCADE , default=None)
     userdetails = models.ForeignKey(Userdetails, models.CASCADE )
     is_active = models.BooleanField(default=True)
     class Meta:
@@ -165,7 +165,7 @@ class Beacon(models.Model):
     def __str__(self):
         return str(self.beacon_name)
 class Company_has_beacon(models.Model):
-    comapany_has_beacon_id =  models.AutoField(primary_key=True)
+    company_has_beacon_id =  models.AutoField(primary_key=True)
     beacon = models.ForeignKey(Beacon, models.CASCADE)
     company = models.ForeignKey(Company, models.CASCADE)
     is_active = models.BooleanField(default=False)
