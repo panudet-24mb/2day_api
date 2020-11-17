@@ -150,4 +150,28 @@ class Announcement(models.Model):
         db_table = "announcement"
     def __str__(self):
         return str(self.announcement_title)
-    
+
+class Beacon(models.Model):
+    beacon_id = models.AutoField(primary_key=True)
+    beacon_uuid =  models.UUIDField(
+         default=uuid.uuid4, editable=False
+    )
+    beacon_name =  models.CharField(max_length=180, blank=True, null=True)  
+    beacon_mac = models.CharField(max_length=250, blank=True, null=True)  
+    beacon_model =models.CharField(max_length=100, blank=True, null=True)  
+    is_active = models.BooleanField(default=False)
+    delete_at = models.DateTimeField(blank=True, null=True )
+    class Meta:
+        db_table = "beacon"
+    def __str__(self):
+        return str(self.beacon_name)
+class Company_has_beacon(models.Model):
+    comapany_has_beacon_id =  models.AutoField(primary_key=True)
+    beacon = models.ForeignKey(Beacon, models.CASCADE)
+    company = models.ForeignKey(Company, models.CASCADE)
+    is_active = models.BooleanField(default=False)
+    delete_at = models.DateTimeField(blank=True, null=True )
+    class Meta:
+        db_table = "company_has_beacon"
+    def __str__(self):
+        return str(self.comapany_has_beacon_id)
