@@ -153,11 +153,10 @@ class Announcement(models.Model):
 
 class Beacon(models.Model):
     beacon_id = models.AutoField(primary_key=True)
-    beacon_uuid =  models.UUIDField(
-         default=uuid.uuid4, editable=False
-    )
     beacon_name =  models.CharField(max_length=180, blank=True, null=True)  
-    beacon_mac = models.CharField(max_length=250, blank=True, null=True)  
+    beacon_unique_uuid = models.CharField(max_length=250, blank=True, null=True)  
+    beacon_service_uuid = models.CharField(max_length=250, blank=True, null=True) 
+    beacon_characteristic_uuid = models.CharField(max_length=250, blank=True, null=True) 
     beacon_model =models.CharField(max_length=100, blank=True, null=True)  
     is_active = models.BooleanField(default=False)
     delete_at = models.DateTimeField(blank=True, null=True )
