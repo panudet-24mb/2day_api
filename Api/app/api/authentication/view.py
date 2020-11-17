@@ -28,7 +28,7 @@ async def check_user(req):
         query_exist_user = ( ' select * from users as a '
                                 ' left join company_has_users as b '
                                 ' on a.users_id = b.users_id '
-                                ' left join company_has_usersdetails as c on b.comapny_has_users_id = c.comapny_has_users_id '
+                                ' left join company_has_usersdetails as c on b.company_has_users_id = c.company_has_users_id '
                                 ' left join userdetails as ud on ud.userdetails_id = c.userdetails_id '
                                 ' left join department as d on d.department_id = ud.department_id  '
                                 ' left join position as p '
