@@ -173,7 +173,7 @@ class Company_has_beacon(models.Model):
     class Meta:
         db_table = "company_has_beacon"
     def __str__(self):
-        return str(self.comapany_has_beacon_id)
+        return str(self.company_has_beacon_id)
 
 class Attendance_method(models.Model):
     attendance_method_id = models.AutoField(primary_key=True)
