@@ -174,3 +174,48 @@ class Company_has_beacon(models.Model):
         db_table = "company_has_beacon"
     def __str__(self):
         return str(self.comapany_has_beacon_id)
+
+class Attendance_method(models.Model):
+    attendance_method_id = models.AutoField(primary_key=True)
+    attendance_method_name = models.CharField(max_length=80, blank=True, null=True)  
+    class Meta:
+        db_table = "attendance_method"
+    def __str__(self):
+        return str(self.attendance_method_name)
+class Attendance_type(models.Model):
+    attendance_type_id = models.AutoField(primary_key=True)
+    attendance_type_name  =  models.CharField(max_length=80, blank=True, null=True)  
+    class Meta:
+        db_table = "attendance_type"
+    def __str__(self):
+        return str(self.attendance_type_name)
+
+class Attendance(models.Model):
+    attendance_id = models.AutoField(primary_key=True)
+    attendance_public_id =  models.UUIDField(
+         default=uuid.uuid4, editable=False
+    )
+    users_uuid = models.ForeignKey(
+        Users,
+        to_field="users_uuid",
+        on_delete=models.CASCADE,
+        related_name="users_uuid_attendance",
+        blank=True,
+        null=True,
+    )
+    attendance_type = models.ForeignKey(Attendance_type, models.CASCADE)
+    attendance_method = models.ForeignKey(Attendance_method, models.CASCADE)
+    attendance_date =  models.DateField(blank=True, null=True )
+    attendance_time = models.TimeField(blank=True, null=True )
+    attendace_remark = models.CharField(max_length=150, blank=True, null=True) 
+    attendance_location = models.CharField(max_length=150, blank=True, null=True) 
+    attendance_lat = models.CharField(max_length=50, blank=True, null=True) 
+    attendance_long =models.CharField(max_length=50, blank=True, null=True) 
+    created = models.DateTimeField()
+    is_active = models.BooleanField(default=False)
+    delete_at = models.DateTimeField(blank=True, null=True )
+    class Meta:
+        db_table = "attendance"
+    def __str__(self):
+        return str(self.attendance_public_id)
+    
