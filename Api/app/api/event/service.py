@@ -22,14 +22,15 @@ async def init_state_check(current_user):
             if not rv:
                 return ({
                 "status" : "success" ,
-                "message" :  { "message" : "empty attendance" } , 
+                "message" :  { "attendance_init" :  0  , "message" : "empty attendance" } , 
                 "status_code" : 200
                 })  
             else:
                 if (rv[0]['attendance_type_id'] == 1 ):
                     return ({
                     "status" : "success" ,
-                    "message" :  { "attendance_date" : str(rv[0]['attendance_date'])  ,
+                    "message" :  { "attendance_init" : 1  ,
+                        "attendance_date" : str(rv[0]['attendance_date'])  ,
                                   "attendance_time" : str(rv[0]['attendance_time']),
                                   "attendance_type_id" : str(rv[0]['attendance_type_id']),
                                    "attendance" : "already checkin"} , 
@@ -38,7 +39,8 @@ async def init_state_check(current_user):
                 if (rv[0]['attendance_type_id'] == 2  ):
                     return ({
                     "status" : "success" ,
-                    "message" :  { "attendance_date" : str(rv[0]['attendance_date'])  ,
+                    "message" :  { "attendance_init" : 2,
+                        "attendance_date" : str(rv[0]['attendance_date'])  ,
                                   "attendance_time" : str(rv[0]['attendance_time']),
                                   "attendance_type_id" : str(rv[0]['attendance_type_id']),
                                   "attendance" : "already checkout"} , 
@@ -80,3 +82,28 @@ async def insertAttendance(req , current_user):
             "status_code" : 400
             })  
 
+async def FindUsersAttendance(current_user):
+    try:
+        dt = datetime.datetime.now(tz)
+        async with in_transaction() as conn:
+            query = (   
+                    " select * from attendance as a where  a.attendance_date = $1 and a.users_uuid_id = $2 order by attendance_id DESC limit 1  "
+            )
+            rv = await conn.execute_query_dict(
+                query,[ dt.date(), current_user["users_uuid"] ]
+             )
+    
+            return ({
+                "status" : "success" ,
+                "message" :  { "message" : "empty attendance" } , 
+                "status_code" : 200
+                })  
+                    
+    except Exception as e:
+        print(e)
+        return ({
+            "status" : "Failed" ,
+            "message" :  { "message" : "Failed" } , 
+            "status_code" : 400
+            })  
+    

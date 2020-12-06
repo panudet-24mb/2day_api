@@ -28,4 +28,12 @@ async def attendance_state (req , current_user):
     json_data = json.dumps(rv , cls=UUIDEncoder)
     data = json.loads(json_data)
     return await response_json(data)
+
+@event_service.route("/event/history/attendance/<month>/years" , methods=['POST'])
+@authorized()
+async def attendance_state (req , current_user , month):
+    rv = await FindUsersAttendance(current_user , month)
+    json_data = json.dumps(rv , cls=UUIDEncoder)
+    data = json.loads(json_data)
+    return await response_json(data)
     
