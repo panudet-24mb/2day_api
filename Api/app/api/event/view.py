@@ -19,7 +19,9 @@ event_service = Blueprint(name="event_service")
 @authorized()
 async def init_state (req,current_user):
     res = await init_state_check(current_user)
-    return await response_json(res)
+    json_data = json.dumps(res , cls=UUIDEncoder)
+    data = json.loads(json_data)
+    return await response_json(data)
 
 @event_service.route("/event/attendance" , methods=['POST'])
 @authorized()
@@ -29,10 +31,10 @@ async def attendance_state (req , current_user):
     data = json.loads(json_data)
     return await response_json(data)
 
-@event_service.route("/event/history/attendance/<month>/years" , methods=['POST'])
+@event_service.route("/event/history/attendance/<month>/<years>" , methods=['GET'])
 @authorized()
-async def attendance_state (req , current_user , month):
-    rv = await FindUsersAttendance(current_user , month)
+async def attendance_state (req , current_user , month , years):
+    rv = await FindUsersAttendance(current_user , month ,years )
     json_data = json.dumps(rv , cls=UUIDEncoder)
     data = json.loads(json_data)
     return await response_json(data)

@@ -218,4 +218,19 @@ class Attendance(models.Model):
         db_table = "attendance"
     def __str__(self):
         return str(self.attendance_public_id)
+
+class Leave_type(models.Model):
+    leave_type_id = models.AutoField(primary_key=True)
+    leave_type_name = models.CharField(max_length=50, blank=True, null=True) 
+class Leave(models.Model):
+    leave_id = models.AutoField(primary_key=True)
+    users_uuid = models.ForeignKey(
+        Users,
+        to_field="users_uuid",
+        on_delete=models.CASCADE,
+        related_name="users_uuid_attendance",
+        blank=True,
+        null=True,
+    )
+    
     

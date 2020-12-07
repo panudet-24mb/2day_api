@@ -14,7 +14,7 @@ async def init_state_check(current_user):
         dt = datetime.datetime.now(tz)
         async with in_transaction() as conn:
             query = (   
-                    " select * from attendance as a where  a.attendance_date = $1 and a.users_uuid_id = $2 order by attendance_id DESC limit 1  "
+                    " select * from attendance as a where  a.attendance_date = $1 and a.users_uuid_id = $2 order by attendance_id DESC limit 2  "
             )
             rv = await conn.execute_query_dict(
                 query,[ dt.date(), current_user["users_uuid"] ]
@@ -41,9 +41,8 @@ async def init_state_check(current_user):
                     "status" : "success" ,
                     "message" :  { "attendance_init" : 2,
                         "attendance_date" : str(rv[0]['attendance_date'])  ,
-                                  "attendance_time" : str(rv[0]['attendance_time']),
-                                  "attendance_type_id" : str(rv[0]['attendance_type_id']),
-                                  "attendance" : "already checkout"} , 
+                                "attendance_details" : rv,
+                                  "attendance" : "attendance success"} , 
                     "status_code" : 200
                     })  
                     
@@ -81,21 +80,34 @@ async def insertAttendance(req , current_user):
             "message" :  { "message" : "Failed" } , 
             "status_code" : 400
             })  
-
-async def FindUsersAttendance(current_user):
+async def FindUsersAttendance(current_user , month ,years):
     try:
         dt = datetime.datetime.now(tz)
         async with in_transaction() as conn:
-            query = (   
-                    " select * from attendance as a where  a.attendance_date = $1 and a.users_uuid_id = $2 order by attendance_id DESC limit 1  "
+            query_checkin = (   
+                    " select * from attendance as a  "
+                    " where DATE_PART('month' ,a.attendance_date) = $1 "
+                    " AND DATE_PART( 'year',a.attendance_date) = $2 and a.users_uuid_id = $3 and a.attendance_type_id = 1 order by attendance_id ASC "
             )
-            rv = await conn.execute_query_dict(
-                query,[ dt.date(), current_user["users_uuid"] ]
+            rv_checkin = await conn.execute_query_dict(
+                query_checkin,[ int(month), int(years) , current_user["users_uuid"]  ]
              )
+            query_checkout = (   
+                    " select * from attendance as a  "
+                    " where DATE_PART('month' ,a.attendance_date) = $1 "
+                    " AND DATE_PART( 'year',a.attendance_date) = $2 and a.users_uuid_id = $3 and a.attendance_type_id = 2 order by attendance_id ASC "
+            )
+            rv_checkout = await conn.execute_query_dict(
+                query_checkout,[ int(month), int(years) , current_user["users_uuid"]  ]
+             )
+            
+            
+            
+          
     
             return ({
                 "status" : "success" ,
-                "message" :  { "message" : "empty attendance" } , 
+                "message" :  { "message" : "rv" } , 
                 "status_code" : 200
                 })  
                     
