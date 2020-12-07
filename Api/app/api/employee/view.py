@@ -11,8 +11,8 @@ tz = pytz.timezone('Asia/Bangkok')
 
 employee_service = Blueprint(name="employee_service")
 
-@employee_service.route("/test" , methods=['GET'])
+@employee_service.route("/employee/health_check" , methods=['GET'])
 @authorized()
-async def test (req,current_user):
-    return response.text('ok')
+async def health_check (req,current_user):
+    return response.json({'message ' : 'ok'})
     
