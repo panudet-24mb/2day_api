@@ -228,7 +228,6 @@ class Leave(models.Model):
         Users,
         to_field="users_uuid",
         on_delete=models.CASCADE,
-        related_name="users_uuid_attendance",
         blank=True,
         null=True,
     )
